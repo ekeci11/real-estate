@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Kontakt - Dion Real Estate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* BODY & FONDI */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('/assets/photo/dionl.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+        }
+
+        /* HEADER */
+        header {
+            background: rgba(0,64,128,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        header img {
+            height: 60px;
+            margin-right: 15px;
+            transition: transform 0.3s;
+        }
+
+        header img:hover {
+            transform: scale(1.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #ffd700;
+            text-shadow: 1px 1px 3px #000;
+        }
+
+        /* KONTAINERI */
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: rgba(0,0,0,0.7);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 30px rgba(0,0,0,0.5);
+            animation: fadeIn 1.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1.section-title {
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 5px #000;
+            animation: slideDown 1s ease-in-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        p {
+            margin: 10px 0;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        a {
+            color: #ffd700;
+            text-decoration: none;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        a:hover {
+            color: #00ffff;
+            transform: scale(1.05);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        ul li:hover {
+            transform: translateX(5px);
+            color: #00ffff;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0,64,128,0.85);
+            color: #ffd700;
+            margin-top: 30px;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+            header h1 {
+                font-size: 22px;
+            }
+            header img {
+                height: 50px;
+            }
+            p {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            h1.section-title {
+                font-size: 22px;
+            }
+            p {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/properties/public" style="display:flex; align-items:center; text-decoration:none; color:white;">
+        <img src="/assets/photo/dion.jpg" alt="Dion Real Estate Logo"/>
+        <h1>Dion Real Estate</h1>
+    </a>
+</header>
+
+<div class="container">
+    <h1 class="section-title">Kontakt</h1>
+
+    <p><strong>Telefon:</strong> 069 44 59 565 , 068 46 64 919</p>
+    <p><strong>Email:</strong> info@dionrealestate.al</p>
+    <p><strong>Adresë:</strong> Maminas, Shijak</p>
+
+    <p><strong>Na ndiqni në rrjetet sociale:</strong></p>
+    <ul>
+        <li><a href="https://www.instagram.com/dion_real_estate_?igsh=MW13N2lzczg0dDRocA==" target="_blank">Instagram</a></li>
+        <!-- Mund të shtoni Facebook, TikTok etj -->
+    </ul>
+</div>
+
+<footer>
+    &copy; Dion Real Estate - 2025
+</footer>
+
+</body>
+</html>

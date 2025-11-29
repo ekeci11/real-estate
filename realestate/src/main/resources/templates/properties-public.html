@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width,
+                   initial-scale=1.0,
+                   maximum-scale=1.0,
+                   user-scalable=no">
+  <title>Dion Real Estate - Premium 2025</title>
+  <style>
+
+    /* ================= BODY ================= */
+    body {
+      font-family: 'Arial', sans-serif;
+      margin:0; padding:0;
+      background-color:#111;
+      color:#eee;
+      overflow-x:hidden;
+      scroll-behavior: smooth;
+    }
+
+    /* ================= HEADER ================= */
+    header {
+      background: url('/assets/photo/maminas.jpg') bottom center/cover no-repeat fixed;
+      height: 300px;
+      position: relative;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      overflow:hidden;
+      color:white;
+    }
+    header::after {
+      content:'';
+      position:absolute;
+      top:0; left:0; width:100%; height:100%;
+      background: rgba(0,0,0,0.5);
+      z-index:0;
+    }
+    header a {
+      position: relative; z-index:2;
+      text-decoration:none;
+      color:white;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+    }
+    header img {
+      height:100px; margin-bottom:15px;
+      opacity:0; transform: translateY(50px) scale(0.8);
+      transition: all 1s cubic-bezier(0.68,-0.55,0.265,1.55);
+    }
+    header h1 {
+      font-size:64px; margin:0;
+      opacity:0; transform: translateY(50px) scale(0.9);
+      transition: all 1s cubic-bezier(0.68,-0.55,0.265,1.55) 0.3s;
+    }
+    header p {
+      font-size:28px; margin-top:5px;
+      opacity:0; transform: translateY(50px) scale(0.9);
+      transition: all 1s cubic-bezier(0.68,-0.55,0.265,1.55) 0.6s;
+    }
+
+    /* ================= SIDE MENU ================= */
+    .menu-icon {
+      font-size:32px; cursor:pointer;
+      position:absolute; top:20px; right:20px;
+      z-index:2; color:white;
+    }
+    .side-menu {
+      position: fixed; top:0; right:-320px;
+      width:280px; height:100%;
+      background:#222;
+      box-shadow:-3px 0 15px rgba(0,0,0,0.5);
+      padding:20px; transition:right 0.5s ease;
+      z-index:9999; overflow-y:auto;
+    }
+    .side-menu.open { right:0; }
+    .close-menu {
+      font-size:28px; cursor:pointer;
+      position:absolute; top:10px; right:20px;
+      color:#eee; transition: color 0.3s;
+    }
+    .close-menu:hover { color:#1e90ff; }
+    .menu-link {
+      display:block; padding:12px 15px; font-size:18px;
+      color:#eee; text-decoration:none;
+      border-radius:8px; margin-bottom:6px;
+      background:#333; transition: all 0.3s;
+    }
+    .menu-link:hover { background:#1e90ff; color:white; transform: scale(1.03); }
+    .dropdown { position:relative; }
+    .dropdown-toggle::after { content:' ▾'; float:right; transition: transform 0.3s; }
+    .dropdown-content {
+      display:none; flex-direction: column; margin-left:10px;
+      border-left:2px solid #1e90ff; overflow:hidden; max-height:0;
+      transition:max-height 0.4s ease;
+    }
+    .dropdown-content a {
+      padding:8px 10px; font-size:16px;
+      border-radius:6px; margin-bottom:4px;
+      transition: all 0.3s; background:#333; color:#eee;
+    }
+    .dropdown-content a:hover { background:#1e90ff; color:white; transform: scale(1.03); }
+    .dropdown.open .dropdown-toggle::after { transform: rotate(180deg); }
+    .dropdown.open .dropdown-content { display:flex; max-height:500px; }
+
+    /* ================= FILTER ================= */
+    .filter-form {
+      padding:20px; background-color:#1a1a1a;
+      display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+      border-radius:8px; margin:20px;
+    }
+    .filter-form select, .filter-form button {
+      padding:6px; border-radius:5px; border:1px solid #555; font-size:14px;
+      background:#222; color:#eee;
+    }
+    .filter-form button {
+      background:#1e90ff; color:white; cursor:pointer; border:none;
+    }
+    .filter-form button:hover { background:#104e8b; }
+    .filter-form input[type="text"] {
+      flex:1;
+    }
+
+    /* ================= PROPERTY CARDS ================= */
+    .properties {
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px,1fr));
+      gap:30px; padding:30px; background:#111;
+    }
+    .property-card {
+      background:#222; color:#eee;
+      border-radius:15px; overflow:hidden;
+      box-shadow:0 10px 20px rgba(0,0,0,0.5);
+      display:flex; flex-direction:column; align-items:center;
+      transition: transform 0.5s ease, box-shadow 0.5s ease, filter 0.5s ease;
+    }
+    .property-card:hover {
+      transform: translateY(-15px) scale(1.05);
+      box-shadow:0 20px 40px rgba(0,0,0,0.7);
+      filter: brightness(1.1);
+    }
+    .property-card img { width:100%; object-fit:cover; border-radius:5px; }
+    .property-card h2 { margin:15px 10px 5px 10px; font-size:22px; color:#1e90ff; text-align:center; }
+    .property-card .description { font-size:14px; color:#ccc; text-align:center; margin:0 15px 10px 15px; min-height:50px; }
+    .property-details { width:90%; font-size:14px; color:#eee; margin-bottom:10px; }
+    .property-details p { margin:3px 0; }
+    .view-details-btn {
+      margin:10px 0 20px 0; padding:10px 18px;
+      background: linear-gradient(135deg,#1e90ff,#104e8b);
+      color:white; border:none; border-radius:8px; cursor:pointer; font-size:16px;
+      transition: all 0.3s;
+    }
+    .view-details-btn:hover {
+      transform: scale(1.1); box-shadow:0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    /* ================= CAROUSEL ================= */
+    .carousel-wrapper { width:100%; position:relative; overflow:hidden; height:auto; }
+    .carousel-track { display:flex; transition: transform 0.5s ease; }
+    .carousel-track img { width:100%; flex-shrink:0; height:auto; object-fit:contain; }
+    .carousel-btn {
+      position:absolute; top:50%;
+      transform:translateY(-50%);
+      background-color: rgba(0,0,0,0.5);
+      color:white; border:none; font-size:24px;
+      padding:5px 10px; cursor:pointer; border-radius:50%;
+    }
+    .prev-btn { left:10px; } .next-btn { right:10px; }
+
+    /* ================= FOOTER ================= */
+    footer {
+      background: url('/assets/photo/dion1.jpg') center/cover no-repeat;
+      color:#fff; text-align:center; padding:50px 20px;
+      font-family: 'Arial Black', Arial, sans-serif;
+      text-shadow:1px 1px 5px rgba(0,0,0,0.6);
+    }
+    footer p { margin:12px 0; font-size:20px; font-weight:bold; }
+    footer a {
+      color:#ffdd00; margin:0 12px;
+      text-decoration:none; font-weight:bold;
+      transition: all 0.3s ease;
+    }
+    footer a:hover {
+      transform: scale(1.2) rotate(-3deg);
+      text-shadow:0 0 10px #1e90ff; text-decoration:underline;
+    }
+
+    /* ================= MODAL ================= */
+    .modal {
+      display:none;
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      background:rgba(0,0,0,0.85);
+      justify-content:center; align-items:center;
+      z-index:10000;
+      animation: fadeInModal 0.5s ease forwards;
+    }
+    .modal-content {
+      background:#333; color:#eee; padding:20px; border-radius:8px;
+      max-width:800px; width:90%; max-height:90%; overflow-y:auto; position:relative;
+      transform: scale(0.7);
+      animation: zoomIn 0.5s forwards;
+    }
+    .modal-content img {
+      width:150px; height:150px; object-fit:cover; margin:5px;
+      cursor:zoom-in;
+      transition: transform 0.3s ease;
+    }
+    .modal-content img:hover { transform: scale(1.1); }
+    .close { position:absolute; top:10px; right:15px; cursor:pointer; font-size:24px; color:#1e90ff; }
+    @keyframes fadeInModal { from {opacity:0} to {opacity:1} }
+    @keyframes zoomIn { from {transform:scale(0.7)} to {transform:scale(1)} }
+
+    /* ================= RESPONSIVE ================= */
+    @media(max-width:768px){
+      header h1{font-size:48px;}
+      header p{font-size:20px;}
+      .property-card h2{font-size:18px;}
+      .menu-icon{font-size:28px;}
+      .side-menu{width:240px;}
+    }
+
+    /* ================= RESPONSIVE OPTIMIZED ================= */
+    @media(max-width:1024px){
+      .properties {
+        grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
+        padding:20px;
+        gap:20px;
+      }
+      .filter-form { flex-direction: column; align-items: stretch; gap:8px; margin:15px; }
+      .filter-form input[type="text"], .filter-form select, .filter-form button { width:100%; }
+    }
+    @media(max-width:768px){
+      header h1 { font-size:36px; }
+      header p { font-size:18px; }
+      .property-card h2 { font-size:16px; }
+      .view-details-btn { font-size:14px; padding:8px 12px; }
+      .carousel-btn { font-size:20px; padding:4px 8px; }
+      .side-menu { width:220px; }
+      .menu-icon { font-size:26px; top:15px; right:15px; }
+    }
+    @media(max-width:480px){
+      header { height:220px; }
+      header img { height:70px; margin-bottom:10px; }
+      .properties { grid-template-columns: 1fr; gap:15px; padding:15px; }
+      .property-details { font-size:13px; }
+    }
+  </style>
+
+</head>
+
+<body>
+
+<header>
+  <a href="/properties/public">
+    <img src="/assets/photo/dion.jpg" alt="Dion Real Estate Logo" class="header-logo">
+    <h1 class="header-title">DION REAL ESTATE</h1>
+    <p class="header-subtitle">PRONA ME VLERË NGA NJERËZ ME VIZION</p>
+  </a>
+  <div class="menu-icon" onclick="openMenu()">☰</div>
+</header>
+<div id="sideMenu" class="side-menu">
+  <span class="close-menu" onclick="closeMenu()">×</span>
+  <a href="/properties/public" class="menu-link">Kreu</a>
+  <a href="/about" class="menu-link">Rreth nesh</a>
+
+  <!-- DROPDOWN: Pronat -->
+  <div class="dropdown">
+    <a href="javascript:void(0)" class="menu-link dropdown-toggle">Pronat</a>
+    <div class="dropdown-content">
+      <a th:href="@{'/properties/public'(category='Tokë Bujqësore')}">Tokë Bujqësore</a>
+      <a th:href="@{'/properties/public'(category='Pemishte')}">Pemishte</a>
+      <a th:href="@{'/properties/public'(category='Truall')}">Truall</a>
+      <a th:href="@{'/properties/public'(category='Vilë')}">Vilë</a>
+      <a th:href="@{'/properties/public'(category='Shtëpi')}">Shtëpi</a>
+      <a th:href="@{'/properties/public'(category='Kapanon')}">Kapanon</a>
+      <a th:href="@{'/properties/public'(category='Magazinë')}">Magazinë</a>
+      <a th:href="@{'/properties/public'(category='Lokale')}">Lokale</a>
+      <a th:href="@{'/properties/public'(category='Garazh')}">Garazh</a>
+    </div>
+  </div>
+
+  <!-- DROPDOWN: Status -->
+  <div class="dropdown">
+    <a href="javascript:void(0)" class="menu-link dropdown-toggle">Status</a>
+    <div class="dropdown-content">
+      <a th:href="@{'/properties/public'(status='Shitje')}">Shitje</a>
+      <a th:href="@{'/properties/public'(status='Qira')}">Qira</a>
+      <a th:href="@{'/properties/public'}">Të gjitha</a>
+    </div>
+  </div>
+
+  <a href="/contact" class="menu-link">Kontakt</a>
+</div>
+
+<!-- FILTER FORM -->
+<form action="/properties/public" method="get" class="filter-form">
+  <select name="category">
+    <option value="">Të gjitha kategoritë</option>
+    <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}" th:selected="${cat == selectedCategory}"></option>
+  </select>
+
+  <select name="status">
+    <option value="">Të gjitha statuset</option>
+    <option th:each="stat : ${statuses}" th:value="${stat}" th:text="${stat}" th:selected="${stat == selectedStatus}"></option>
+  </select>
+
+  <!--SEARCH -->
+  <input type="text" name="keyword" placeholder="Kërko..."
+         th:value="${keyword}"
+         style="flex:1; min-width:150px; padding:6px; border-radius:5px; border:1px solid #555; background:#222; color:#eee;">
+
+  <button type="submit">Filtro</button>
+</form>
+
+<!-- PROPERTIES GRID -->
+<div class="properties">
+  <div th:each="property : ${properties}" class="property-card">
+    <div class="carousel-wrapper">
+      <div class="carousel-track" th:attr="data-images=${property.imageFileNames}">
+        <img loading="lazy" th:each="img : ${property.imageFileNames}" th:src="@{'/uploads/images/' + ${img}}" alt="Property Image">
+      </div>
+      <button class="carousel-btn prev-btn">&#10094;</button>
+      <button class="carousel-btn next-btn">&#10095;</button>
+    </div>
+    <h2 th:text="${property.title}"></h2>
+    <p class="description" th:text="${property.description}"></p>
+    <div class="property-details">
+      <p><strong>Category:</strong> <span th:text="${property.category}"></span></p>
+      <p><strong>Status:</strong> <span th:text="${property.status}"></span></p>
+      <p><strong>Çmimi:</strong> <span th:text="${property.price} + ' €'"></span></p>
+    </div>
+    <button type="button" class="view-details-btn" th:attr="data-id=${property.id}">Shiko më shumë</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>Kontakt: 0694459565</p>
+  <p>
+    <a href="https://www.instagram.com/dion_real_estate_?igsh=MW13N2lzczg0dDRocA==" target="_blank">Instagram</a> |
+    <a href="https://www.facebook.com/" target="_blank">Facebook</a>
+  </p>
+  <p2>Powered by Eljon Keçi</p2>
+</footer>
+
+<!-- MODAL -->
+<div id="propertyModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 id="modalTitle"></h2>
+    <p id="modalCategoryStatus"></p>
+    <p id="modalDescription"></p>
+    <p><strong>Price:</strong> <span id="modalPrice"></span></p>
+    <p><strong>Location:</strong> <span id="modalLocation"></span></p>
+    <div id="modalImages" style="display:flex; flex-wrap:wrap;"></div>
+  </div>
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('.header-logo').style.opacity='1';
+    document.querySelector('.header-logo').style.transform='translateY(0) scale(1)';
+    document.querySelector('.header-title').style.opacity='1';
+    document.querySelector('.header-title').style.transform='translateY(0) scale(1)';
+    document.querySelector('.header-subtitle').style.opacity='1';
+    document.querySelector('.header-subtitle').style.transform='translateY(0) scale(1)';
+  });
+
+  function openMenu(){ document.getElementById("sideMenu").classList.add("open"); }
+  function closeMenu(){ document.getElementById("sideMenu").classList.remove("open"); }
+
+  document.querySelectorAll('.dropdown > a').forEach(item=>{
+    item.addEventListener('click', function(e){
+      e.preventDefault();
+      this.parentElement.classList.toggle('open');
+    });
+  });
+
+  // CAROUSEL
+  document.querySelectorAll('.property-card').forEach(card => {
+    const track = card.querySelector('.carousel-track');
+    const images = track.querySelectorAll('img');
+    let index = 0;
+    const prevBtn = card.querySelector('.prev-btn');
+    const nextBtn = card.querySelector('.next-btn');
+    function showSlide(i){
+      if(i<0) index=images.length-1;
+      else if(i>=images.length) index=0;
+      else index=i;
+      track.style.transform='translateX(-'+index*100+'%)';
+    }
+    prevBtn.addEventListener('click', ()=>showSlide(index-1));
+    nextBtn.addEventListener('click', ()=>showSlide(index+1));
+  });
+
+  // MODAL
+  document.querySelectorAll('.view-details-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.getAttribute('data-id');
+      fetch(`/properties/api/${id}`)
+              .then(r=>r.json())
+              .then(data=>{
+                document.getElementById('modalTitle').textContent = data.title;
+                document.getElementById('modalCategoryStatus').textContent = data.category+" | "+data.status;
+                document.getElementById('modalDescription').textContent = data.description;
+                document.getElementById('modalPrice').textContent = data.price+" €";
+                document.getElementById('modalLocation').textContent = data.location;
+                const imgs = document.getElementById('modalImages');
+                imgs.innerHTML="";
+                data.imageFileNames.forEach(i=>{
+                  const im = document.createElement("img");
+                  im.src="/uploads/images/"+i;
+                  im.loading = "lazy";
+                  im.onclick = ()=>window.open(im.src,"_blank");
+                  imgs.appendChild(im);
+                });
+                document.getElementById('propertyModal').style.display='flex';
+              });
+    });
+  });
+  document.querySelector('.close').onclick = ()=>document.getElementById('propertyModal').style.display='none';
+  window.onclick = (e)=>{if(e.target.id==='propertyModal') document.getElementById('propertyModal').style.display='none';}
+</script>
+
+</body>
+</html>

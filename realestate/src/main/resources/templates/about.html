@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Rreth nesh - Dion Real Estate</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      padding: 0;
+      margin: 0;
+      color: #333;
+      background: url('assets/photo/maminas.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    header {
+      background: rgba(0,64,128,0.85);
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 10px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header img {
+      height: 60px;
+      margin-right: 15px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    .greeting {
+      text-align: center;
+      font-size: 22px;
+      margin: 20px 0;
+      color: #ffd700;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: rgba(255,255,255,0.9);
+      padding: 20px 30px;
+      border-radius: 12px;
+      line-height: 1.8;
+      font-size: 18px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      animation: fadeIn 2s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1.section-title {
+      color: #004080;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    ul li {
+      margin-bottom: 10px;
+      transition: transform 0.3s, color 0.3s;
+    }
+
+    ul li:hover {
+      transform: translateX(10px);
+      color: #004080;
+    }
+
+    /* Slider për fotot */
+    .slider {
+      max-width: 900px;
+      margin: 30px auto;
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .slides {
+      display: flex;
+      width: 300%;
+      animation: slide 20s infinite; /* NGA 12s → 20s MË I NGADALSHËM */
+    }
+
+    .slides img {
+      width: 100%;
+      height: 300px; /* FOTO MË TË VOGLA */
+      object-fit: cover;
+    }
+
+    @keyframes slide {
+      0% { transform: translateX(0%); }
+      33% { transform: translateX(-100%); }
+      66% { transform: translateX(-200%); }
+      100% { transform: translateX(0%); }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .slides img {
+        height: 200px; /* MË TË VOGLA NË TELEFON */
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: rgba(0,64,128,0.85);
+      color: white;
+      margin-top: 30px;
+    }
+
+    /* Responsive mobile */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 22px;
+      }
+      .container {
+        padding: 15px 20px;
+        font-size: 16px;
+      }
+      .greeting {
+        font-size: 18px;
+        margin: 15px 0;
+      }
+      .slider {
+        max-width: 100%;
+        margin: 20px auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header img {
+        height: 50px;
+      }
+      .container {
+        padding: 10px 15px;
+        font-size: 14px;
+      }
+      .greeting {
+        font-size: 16px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/properties/public" style="display:flex; align-items:center; text-decoration:none; color:white;">
+    <img src="assets/photo/dion.jpg" alt="Dion Real Estate Logo"/>
+    <h1>Dion Real Estate</h1>
+  </a>
+</header>
+
+<div class="greeting" id="greeting"></div>
+
+<div class="container">
+  <h1 class="section-title">Rreth nesh</h1>
+
+  <p>
+    Për herë të parë hapet zyra imobiliare <strong>Dion Real Estate</strong> në Maminas!
+    Ne sjellim profesionalizëm, korrektësi dhe eksperiencë për t’ju ndihmuar
+    në çdo hap drejt pronës suaj të ëndrrave.
+  </p>
+
+  <p><strong>Shërbimet tona:</strong></p>
+  <ul>
+    <li>Shitje dhe blerje pronash – shtëpi, toka, kapanone, vila</li>
+    <li>Qira afatshkurtra dhe afatgjata</li>
+    <li>Shtëpi me qera për pushime në Gjirin e Lalzit</li>
+    <li>Ndermjetësim dhe vlerësim real i tregut</li>
+    <li>Konsulencë ligjore dhe dokumentacioni</li>
+  </ul>
+</div>
+
+<!-- Slider me fotot -->
+<div class="slider">
+  <div class="slides">
+    <img src="assets/photo/office1.jpg" alt="Zyra Dion 1">
+    <img src="assets/photo/office2.jpg" alt="Zyra Dion 2">
+    <img src="assets/photo/office3.jpg" alt="Zyra Dion 3">
+  </div>
+</div>
+
+<footer>
+  &copy; Dion Real Estate - Kontakt: 0694459565
+</footer>
+
+<script>
+  // Përshëndetje sipas kohës së ditës
+  const greetingEl = document.getElementById('greeting');
+  const hour = new Date().getHours();
+  let greetingText = "Mirë se vini në Dion Real Estate!";
+  if(hour < 12) greetingText = "Mirëmëngjesi! Mirë se vini në Dion Real Estate!";
+  else if(hour < 18) greetingText = "Mirëdita! Mirë se vini në Dion Real Estate!";
+  else greetingText = "Mbrëmje të mbarë! Mirë se vini në Dion Real Estate!";
+  greetingEl.textContent = greetingText;
+</script>
+
+</body>
+</html>

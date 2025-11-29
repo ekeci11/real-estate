@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista e Pronave - Dion Real Estate</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        h1 {
+            color: #1cc88a;
+            text-shadow: 1px 1px 2px #ccc;
+        }
+        .filter-row {
+            margin-bottom: 25px;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .img-thumbnail {
+            border-radius: 0.75rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .img-thumbnail:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+        }
+        .btn-primary { background-color: #4e73df; border: none; }
+        .btn-primary:hover { background-color: #2e59d9; }
+        .btn-success { background-color: #1cc88a; border: none; }
+        .btn-success:hover { background-color: #17a673; }
+        .btn-warning { background-color: #f6c23e; border: none; }
+        .btn-warning:hover { background-color: #dda20a; }
+        .btn-danger { background-color: #e74a3b; border: none; }
+        .btn-danger:hover { background-color: #c42a1f; }
+
+        /* Përshkrimi i strukturuar në tabelë */
+        .desc-cell {
+            max-width: 250px; /* Kufizon gjerësinë */
+            white-space: pre-wrap; /* Ruaj enter-at */
+            word-wrap: break-word; /* Ndaj fjalët e gjata */
+            overflow: hidden;
+            text-overflow: ellipsis; /* Shfaq ... për tekst shumë të gjatë */
+            max-height: 100px; /* Kufizon lartësinë */
+        }
+
+        /* Modal images */
+        .modal-body img {
+            border-radius: 0.5rem;
+            margin-bottom: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .modal-body img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* Responsive table */
+        .table-responsive {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4">Lista e Pronave</h1>
+
+    <!-- Filter & Add Property -->
+    <div class="row filter-row g-3">
+        <div class="col-md-3">
+            <select id="statusFilter" class="form-select">
+                <option value="">-- Zgjidh Status --</option>
+                <option value="Shitje">Shitje</option>
+                <option value="Qira">Qira</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select id="categoryFilter" class="form-select">
+                <option value="">-- Zgjidh Kategorinë --</option>
+                <option value="Tokë Bujqësore">Tokë Bujqësore</option>
+                <option value="Pemishte">Pemishte</option>
+                <option value="Truall">Truall</option>
+                <option value="Vilë">Vilë</option>
+                <option value="Shtëpi">Shtëpi</option>
+                <option value="Kapanon">Kapanon</option>
+                <option value="Magazinë">Magazinë</option>
+                <option value="Lokale">Lokale</option>
+                <option value="Garazh">Garazh</option>
+            </select>
+        </div>
+        <div class="col-md-3 d-grid">
+            <button class="btn btn-primary" onclick="filterProperties()">Filtro</button>
+        </div>
+        <div class="col-md-3 text-end">
+            <a class="btn btn-success" th:href="@{/properties/new}">Shto Pronë</a>
+        </div>
+    </div>
+
+    <!-- Properties Table -->
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover align-middle shadow-sm bg-white rounded" id="propertiesTable">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Foto</th>
+                <th>Titulli</th>
+                <th>Qyteti</th>
+                <th>Adresa</th>
+                <th>Çmimi (€)</th>
+                <th>Dhomat</th>
+                <th>Zona (m²)</th>
+                <th>Statusi</th>
+                <th>Kategoria</th>
+                <th>Përshkrimi</th>
+                <th>Veprime</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="property : ${properties}" th:data-status="${property.status}" th:data-category="${property.category}">
+                <td th:text="${property.id}"></td>
+                <td>
+                    <img th:if="${property.imageFileNames != null and !property.imageFileNames.isEmpty()}"
+                         th:src="@{'/uploads/images/' + ${property.imageFileNames[0]}}"
+                         class="img-thumbnail" style="width:120px;height:80px;object-fit:cover;"
+                         data-bs-toggle="modal"
+                         th:data-bs-target="'#galleryModal' + ${property.id}">
+                    <span th:if="${property.imageFileNames == null or property.imageFileNames.isEmpty()}">Pa foto</span>
+                </td>
+                <td th:text="${property.title}"></td>
+                <td th:text="${property.city}"></td>
+                <td th:text="${property.address}"></td>
+                <td th:text="${#numbers.formatDecimal(property.price, 0, 'POINT', 2, 'COMMA')}"></td>
+                <td th:text="${property.rooms}"></td>
+                <td th:text="${property.area}"></td>
+                <td th:text="${property.status}"></td>
+                <td th:text="${property.category}"></td>
+                <td class="desc-cell" th:text="${property.description}"></td>
+                <td>
+                    <a th:href="@{'/properties/edit/' + ${property.id}}" class="btn btn-sm btn-warning">Edito</a>
+                    <a th:href="@{'/properties/delete/' + ${property.id}}" class="btn btn-sm btn-danger" onclick="return confirm('A jeni i sigurt që doni ta fshini këtë pronë?')">Fshi</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal Gallery -->
+<div th:each="property : ${properties}" th:id="'galleryModal' + ${property.id}" class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" th:text="${property.title}">Titulli i pronës</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4 mb-2" th:each="img : ${property.imageFileNames}">
+                        <img th:src="@{'/uploads/images/' + ${img}}" class="img-fluid img-thumbnail"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function filterProperties() {
+        const status = document.getElementById('statusFilter').value;
+        const category = document.getElementById('categoryFilter').value;
+        const rows = document.querySelectorAll('#propertiesTable tbody tr');
+        rows.forEach(row => {
+            const rowStatus = row.getAttribute('data-status');
+            const rowCategory = row.getAttribute('data-category');
+            let show = true;
+            if (status && rowStatus !== status) show = false;
+            if (category && rowCategory !== category) show = false;
+            row.style.display = show ? '' : 'none';
+        });
+    }
+</script>
+</body>
+</html>
+
