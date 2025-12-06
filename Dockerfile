@@ -1,4 +1,7 @@
-FROM ubuntu:latest
-LABEL authors="user"
+FROM eclipse-temurin:17-jdk-alpine
 
-ENTRYPOINT ["top", "-b"]
+WORKDIR /app
+
+COPY target/realestate-0.0.1-SNAPSHOT.jar app.jar
+
+CMD ["java", "-jar", "app.jar"]
